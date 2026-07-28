@@ -1,10 +1,10 @@
 import struct
 
 e_ident = b'\x7fELF\x02\x01\x01\x00' + b'\x00' * 8
-e_type = 2            
-e_machine = 0x3E      
+e_type = 2
+e_machine = 0x3E
 e_version = 1
-e_entry = 0x400078    
+e_entry = 0x400078
 e_phoff = 64
 e_shoff = 0
 e_flags = 0
@@ -21,24 +21,23 @@ ehdr = e_ident + struct.pack(
     e_phoff, e_shoff, e_flags, e_ehsize,
     e_phentsize, e_phnum, e_shentsize, e_shnum, e_shstrndx
 )
-assert len(ehdr) == 64
 
 code = (
     b'\xb8\x01\x00\x00\x00'
     b'\xbf\x01\x00\x00\x00'
     b'\x48\x8d\x35\x10\x00\x00\x00'
-    b'\xba\x16\x00\x00\x00'
+    b'\xba\x0e\x00\x00\x00'
     b'\x0f\x05'
     b'\xb8\x3c\x00\x00\x00'
     b'\x31\xff'
     b'\x0f\x05'
 )
-msg = 'Привет, мир!\n'.encode('utf-8')
+msg = b'Hello, world!\n'
 data = code + msg
 filesize = 64 + 56 + len(data)
 
-p_type = 1            
-p_flags = 5           
+p_type = 1
+p_flags = 5
 p_offset = 0
 p_vaddr = 0x400000
 p_paddr = 0x400000
@@ -51,7 +50,6 @@ phdr = struct.pack(
     p_type, p_flags, p_offset,
     p_vaddr, p_paddr, p_filesz, p_memsz, p_align
 )
-assert len(phdr) == 56
 
 with open('hello', 'wb') as f:
     f.write(ehdr)
