@@ -1,11 +1,10 @@
 import struct
 
-# --- ELF Header ---
 e_ident = b'\x7fELF\x02\x01\x01\x00' + b'\x00' * 8
-e_type = 2            # ET_EXEC
-e_machine = 0x3E      # x86-64
+e_type = 2            
+e_machine = 0x3E      
 e_version = 1
-e_entry = 0x400078    # точка входа = base + ehdr_size + phdr_size
+e_entry = 0x400078    
 e_phoff = 64
 e_shoff = 0
 e_flags = 0
@@ -24,7 +23,6 @@ ehdr = e_ident + struct.pack(
 )
 assert len(ehdr) == 64
 
-# --- Program Header (PT_LOAD) ---
 code = (
     b'\xb8\x01\x00\x00\x00'
     b'\xbf\x01\x00\x00\x00'
@@ -39,8 +37,8 @@ msg = 'Привет, мир!\n'.encode('utf-8')
 data = code + msg
 filesize = 64 + 56 + len(data)
 
-p_type = 1            # PT_LOAD
-p_flags = 5           # PF_R | PF_X
+p_type = 1            
+p_flags = 5           
 p_offset = 0
 p_vaddr = 0x400000
 p_paddr = 0x400000
@@ -55,7 +53,6 @@ phdr = struct.pack(
 )
 assert len(phdr) == 56
 
-# --- Запись исполняемого файла ---
 with open('hello', 'wb') as f:
     f.write(ehdr)
     f.write(phdr)
